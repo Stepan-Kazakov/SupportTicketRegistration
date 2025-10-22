@@ -1,0 +1,38 @@
+@startuml
+!define RECTANGLE class
+
+left to right direction
+
+actor "Пользователь" as User
+actor "Администратор" as Admin
+
+rectangle "Система учета запросов" {
+  usecase "Аутентифицироваться" as Auth
+  usecase "Подать запрос" as Submit
+  usecase "Просмотреть свои запросы" as ViewOwn
+  usecase "Обработать запрос" as Process
+  usecase "Генерировать отчет" as Report
+}
+
+User --> Auth
+User --> Submit
+User --> ViewOwn
+
+Admin --> Auth
+Admin --> Process
+Admin --> Report
+
+Submit ..> Auth : <<include>>
+ViewOwn ..> Auth : <<include>>
+Process ..> Auth : <<include>>
+Report ..> Auth : <<include>>
+
+Process .> ViewOwn : <<extend>> (просмотр всех)
+
+note right of Process
+  Включает под-действия:
+  - Назначить статус
+  - Добавить комментарий
+end note
+
+@enduml
